@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchPokemon, fetchVotePercent, upsertVote } from '@/utils/actions'
+import { fetchPokemonPair, fetchVotePercent, insertVote } from '@/utils/actions'
 import { PokemonData } from '@/utils/types'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -16,20 +16,12 @@ export default function Form({ initialPokemon }: Props) {
   const [votePercent, setVotePercent] = useState(0)
   const [selected, setSelected] = useState<PokemonData>()
 
-  async function handleClick(selectedPokemon: PokemonData) {
+  async function handleClick(selectedPokemon: PokemonData, other: PokemonData) {
     setSelected(selectedPokemon)
-    setVotePercent(
-      pokemon[0].id === selectedPokemon.id
-        ? await fetchVotePercent(pokemon[0].id, pokemon[1].id)
-        : await fetchVotePercent(pokemon[1].id, pokemon[0].id),
-    )
-    await upsertVote(
-      selectedPokemon.id,
-      selectedPokemon.name,
-      selectedPokemon.type,
-    )
+    setVotePercent(await fetchVotePercent(selectedPokemon.id, other.id))
+    await insertVote(selectedPokemon.id, other.id)
     setHasVoted(true)
-    setPokemon(await fetchPokemon())
+    setPokemon(await fetchPokemonPair())
   }
 
   return (
@@ -59,13 +51,19 @@ export default function Form({ initialPokemon }: Props) {
       <div
         className={`flex items-center gap-4 pt-4 ${hasVoted ? 'hidden' : ''}`}
       >
-        <button onClick={() => handleClick(pokemon[0])} className="w-full">
+        <button
+          onClick={() => handleClick(pokemon[0], pokemon[1])}
+          className="w-full"
+        >
           <Pokemon {...pokemon[0]} />
         </button>
 
         <p className="font-bold">OR</p>
 
-        <button onClick={() => handleClick(pokemon[1])} className="w-full">
+        <button
+          onClick={() => handleClick(pokemon[1], pokemon[0])}
+          className="w-full"
+        >
           <Pokemon {...pokemon[1]} />
         </button>
       </div>

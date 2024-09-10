@@ -1,67 +1,50 @@
 'use server'
 
 import { db } from '@/db/db'
-import { pokemon } from '@/db/schema'
-import { desc, eq, sql } from 'drizzle-orm'
+import { pokemon, vote } from '@/db/schema'
+import { count, desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { colorFromType } from './colorFromType'
 import { PokemonData } from './types'
 
-export async function fetchPokemon(): Promise<[PokemonData, PokemonData]> {
+export async function fetchPokemonPair(): Promise<[PokemonData, PokemonData]> {
   let [id1, id2] = getIds()
 
-  let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id1}`)
-  let data = await res.json()
-  let pokemon1 = {
-    id: id1,
-    name: data.name,
-    imageURL: data.sprites.other['official-artwork'].front_default,
-    type: data.types[0].type.name,
-  }
-
-  res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id2}`)
-  data = await res.json()
-  let pokemon2 = {
-    id: id2,
-    name: data.name,
-    imageURL: data.sprites.other['official-artwork'].front_default,
-    type: data.types[0].type.name,
-  }
+  let pokemon1 = (await db.select().from(pokemon).where(eq(pokemon.id, id1)))[0]
+  let pokemon2 = (await db.select().from(pokemon).where(eq(pokemon.id, id2)))[0]
 
   revalidatePath('/')
 
   return [pokemon1, pokemon2]
 }
 
-export async function upsertVote(id: number, name: string, type: string) {
-  await db
-    .insert(pokemon)
-    .values({ id, name, type, votes: 1 })
-    .onConflictDoUpdate({
-      target: pokemon.id,
-      set: { votes: sql`${pokemon.votes} + 1` },
+export async function fetchAllVotes() {
+  const data = await db
+    .select({
+      name: pokemon.name,
+      type: pokemon.type,
+      votes: count(vote),
     })
+    .from(vote)
+    .leftJoin(pokemon, eq(pokemon.id, vote.vote))
+    .groupBy(vote.vote)
+    .orderBy(desc(count(vote)))
+  return data.map((entry) => ({
+    name: entry.name!,
+    fill: colorFromType(entry.type!),
+    votes: entry.votes,
+  }))
+}
+
+export async function insertVote(pokemonVoted: number, pokemonOther: number) {
+  await db.insert(vote).values({
+    vote: pokemonVoted,
+    other: pokemonOther,
+  })
 }
 
 export async function fetchVotePercent(id1: number, id2: number) {
-  let votes1 = (await db.select().from(pokemon).where(eq(pokemon.id, id1)))[0]
-  let votes2 = (await db.select().from(pokemon).where(eq(pokemon.id, id2)))[0]
-
-  if (!votes1 && !votes2) return 50
-  if (!votes1) return 0
-  if (!votes2) return 100
-
-  return Math.round((votes1.votes / (votes1.votes + votes2.votes)) * 100)
-}
-
-export async function fetchAllPokemon() {
-  let data = await db.select().from(pokemon).orderBy(desc(pokemon.votes))
-  return data.map((entry) => ({
-    id: entry.id,
-    name: entry.name,
-    fill: colorFromType(entry.type),
-    votes: entry.votes,
-  }))
+  return 1
 }
 
 function getIds(): [number, number] {

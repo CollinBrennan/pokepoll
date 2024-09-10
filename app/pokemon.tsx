@@ -21,11 +21,11 @@ const colors: Record<string, string> = {
   fairy: 'border-[#D685AD] group-hover:bg-[#D685AD]',
 }
 
-export default function Pokemon({ name, imageURL, type }: PokemonData) {
+export default function Pokemon({ id, name, type }: PokemonData) {
   return (
     <div className="group capitalize">
       <img
-        src={imageURL}
+        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
         alt={name}
         className={`aspect-square w-full rounded-xl border-2 ${colors[type]}`}
       />

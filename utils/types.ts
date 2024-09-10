@@ -1,8 +1,7 @@
 export type PokemonData = {
   id: number
   name: string
-  imageURL: string
-  type: Type
+  type: string
 }
 
 export type Type =

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Nav from './nav'
 
 export const metadata: Metadata = {
   title: 'PokePoll',
@@ -17,6 +18,7 @@ export default function RootLayout({
         <div className="flex min-h-screen justify-center">
           <div className="w-full max-w-screen-lg px-4 text-center">
             <h1 className="pt-8 text-4xl font-bold">PokéPoll</h1>
+            <Nav />
             {children}
           </div>
         </div>
