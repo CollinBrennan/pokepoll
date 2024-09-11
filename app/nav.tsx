@@ -12,7 +12,7 @@ export default function Nav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex gap-4 pt-8">
+    <nav className="flex gap-4 pt-8 text-lg">
       {pages.map((page) => {
         return (
           <Link

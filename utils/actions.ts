@@ -29,7 +29,9 @@ export async function fetchAllVotes() {
     .leftJoin(pokemon, eq(pokemon.id, vote.vote))
     .groupBy(vote.vote)
     .orderBy(desc(count(vote)))
+
   let max = data[0].votes
+
   return data.map((entry) => ({
     name: entry.name!,
     fill: colorFromType(entry.type!),
