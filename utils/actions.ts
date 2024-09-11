@@ -2,7 +2,7 @@
 
 import { db } from '@/db/db'
 import { pokemon, vote } from '@/db/schema'
-import { count, desc, eq } from 'drizzle-orm'
+import { and, count, desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { colorFromType } from './colorFromType'
 import { PokemonData } from './types'
@@ -44,8 +44,29 @@ export async function insertVote(pokemonVoted: number, pokemonOther: number) {
   })
 }
 
-export async function fetchVotePercent(id1: number, id2: number) {
-  return 1
+export async function fetchVotePercent(
+  pokemonVoted: number,
+  pokemonOther: number,
+) {
+  let votesVoted = (
+    await db
+      .select({ count: count() })
+      .from(vote)
+      .where(and(eq(vote.vote, pokemonVoted), eq(vote.other, pokemonOther)))
+  )[0].count
+
+  let votesOther = (
+    await db
+      .select({ count: count() })
+      .from(vote)
+      .where(and(eq(vote.vote, pokemonOther), eq(vote.other, pokemonVoted)))
+  )[0].count
+
+  if (!votesVoted && !votesOther) return 50
+
+  let votePercent = Math.round((votesVoted / (votesVoted + votesOther)) * 100)
+
+  return votePercent
 }
 
 function getIds(): [number, number] {

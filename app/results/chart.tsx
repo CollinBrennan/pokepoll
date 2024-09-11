@@ -18,7 +18,7 @@ type Props = {
 
 export default function Chart({ data }: Props) {
   return (
-    <ResponsiveContainer width="100%" height={data.length * 40}>
+    <ResponsiveContainer width="100%" height={data.length * 30}>
       <BarChart data={data} margin={{ right: 44 }} layout="vertical">
         <Bar dataKey="votes">
           <LabelList
