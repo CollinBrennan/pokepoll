@@ -1,5 +1,12 @@
 'use client'
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  BarChart,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 type Props = {
   data: {
@@ -12,15 +19,22 @@ type Props = {
 export default function Chart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={data.length * 40}>
-      <BarChart data={data} layout="vertical">
-        <Bar dataKey="votes" label={{ fill: 'white', position: 'right' }} />
-        <XAxis type="number" axisLine={false} tick={false} />
+      <BarChart data={data} margin={{ right: 44 }} layout="vertical">
+        <Bar dataKey="votes">
+          <LabelList
+            dataKey="votes"
+            fill="white"
+            position="right"
+            formatter={(label: string) => label + '%'}
+          />
+        </Bar>
+        <XAxis type="number" domain={[0, 100]} axisLine={false} tick={false} />
         <YAxis
           type="category"
           dataKey="name"
           axisLine={false}
           tickLine={false}
-          width={100}
+          width={96}
           style={{ fill: '#FFFFFF' }}
           className="capitalize"
         />
