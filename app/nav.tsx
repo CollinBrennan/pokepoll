@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 const pages = [
   { name: 'Vote', route: '/' },
   { name: 'Results', route: '/results' },
+  { name: 'Compare', route: '/compare' },
 ]
 
 export default function Nav() {

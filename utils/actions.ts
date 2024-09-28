@@ -71,6 +71,10 @@ export async function fetchVotePercent(
   return votePercent
 }
 
+export async function fetchAllPokemon(): Promise<PokemonData[]> {
+  return await db.select().from(pokemon)
+}
+
 function getIds(): [number, number] {
   let id1 = Math.floor(Math.random() * 151) + 1
   let id2 = Math.floor(Math.random() * 151) + 1
