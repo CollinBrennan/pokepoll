@@ -1,3 +1,4 @@
+import { formattedPokemonName } from '@/utils/pokemon'
 import { PokemonData } from '@/utils/types'
 
 const colors: Record<string, string> = {
@@ -35,7 +36,7 @@ export default function Pokemon({ pokemonData, isSelected }: Props) {
         style={{ '--color': colors[pokemonData.type] } as React.CSSProperties}
         className={`aspect-square w-full rounded-xl border-2 border-[var(--color)] ${isSelected ? 'bg-[var(--color)]' : 'hover:bg-[var(--color)]'}`}
       />
-      {pokemonData.name}
+      {formattedPokemonName(pokemonData.name)}
     </div>
   )
 }

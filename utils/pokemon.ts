@@ -40,3 +40,18 @@ export function colorFromType(type: string) {
       return '#FFFFFF'
   }
 }
+
+export function formattedPokemonName(name: string) {
+  switch (name) {
+    case 'mr-mime':
+      return 'Mr. Mime'
+    case 'nidoran-f':
+      return 'Nidoran♀'
+    case 'nidoran-m':
+      return 'Nidoran♂'
+    case 'farfetchd':
+      return "Farfetch'd"
+    default:
+      return name[0].toUpperCase() + name.slice(1)
+  }
+}

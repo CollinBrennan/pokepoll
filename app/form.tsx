@@ -1,8 +1,9 @@
 'use client'
 
 import { fetchPokemonPair, fetchVotePercent, insertVote } from '@/utils/actions'
+import { formattedPokemonName } from '@/utils/pokemon'
 import { PokemonData } from '@/utils/types'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import Pokemon from './pokemon'
 
 type Props = {
@@ -20,6 +21,8 @@ export default function Form({ initialPokemon }: Props) {
   const [choice, setChoice] = useState<Choice>()
   const [votePercent, setVotePercent] = useState(0)
 
+  const [isPending, startTransition] = useTransition()
+
   const isFirstSelected = hasVoted && choice?.picked.id === pokemon[0].id
   const isSecondSelected = hasVoted && choice?.picked.id === pokemon[1].id
 
@@ -31,7 +34,7 @@ export default function Form({ initialPokemon }: Props) {
   }
 
   async function handleVoteAgain() {
-    setPokemon(await fetchPokemonPair())
+    startTransition(async () => setPokemon(await fetchPokemonPair()))
     setHasVoted(false)
   }
 
@@ -39,9 +42,10 @@ export default function Form({ initialPokemon }: Props) {
     <div>
       <h1 className="pt-8">
         {hasVoted
-          ? `${votePercent}% pick ${choice?.picked.name} over ${choice?.other.name}`
+          ? `${votePercent}% pick ${formattedPokemonName(choice?.picked.name ?? '')} over ${formattedPokemonName(choice?.other.name ?? '')}`
           : 'Which pokemon do you like more?'}
       </h1>
+
       <div className={`flex items-center gap-4 pt-4`}>
         <div className="relative">
           <button
@@ -78,6 +82,7 @@ export default function Form({ initialPokemon }: Props) {
         onClick={handleVoteAgain}
         className="mt-8 rounded bg-white px-4 py-2 font-bold text-black disabled:opacity-50"
       >
+        {isPending && <div className="inline-flex animate-spin">😔</div>}
         Vote again
       </button>
     </div>

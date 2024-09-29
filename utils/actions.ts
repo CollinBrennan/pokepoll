@@ -4,7 +4,7 @@ import { db } from '@/db/db'
 import { pokemon, vote } from '@/db/schema'
 import { and, count, desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
-import { colorFromType } from './colorFromType'
+import { colorFromType } from './pokemon'
 import { PokemonData } from './types'
 
 export async function fetchPokemonPair(): Promise<[PokemonData, PokemonData]> {
