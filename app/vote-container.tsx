@@ -55,7 +55,7 @@ export default function VoteContainer({ initialPokemon }: Props) {
             backgroundColor: pokemonColors[pokemon1.type],
           } as React.CSSProperties
         }
-        className="group relative h-full w-1/2 size-aspect overflow-hidden"
+        className="group relative h-full w-1/2 size-aspect overflow-hidden disabled:brightness-50"
       >
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon1.id}.png`}
@@ -74,7 +74,7 @@ export default function VoteContainer({ initialPokemon }: Props) {
             backgroundColor: pokemonColors[pokemon2.type],
           } as React.CSSProperties
         }
-        className="group relative h-full w-1/2 size-aspect overflow-hidden"
+        className="group relative h-full w-1/2 size-aspect overflow-hidden disabled:brightness-50"
       >
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon2.id}.png`}

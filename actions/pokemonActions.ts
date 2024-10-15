@@ -2,8 +2,9 @@
 
 import db from '@/db/drizzle'
 import { pokemon, vote } from '@/db/schema'
+import { pokemonColors } from '@/utils/pokemonUtils'
 import { PokemonData } from '@/utils/types'
-import { and, count, eq } from 'drizzle-orm'
+import { and, count, desc, eq } from 'drizzle-orm'
 
 export async function fetchPokemonPair(): Promise<[PokemonData, PokemonData]> {
   let [id1, id2] = getIds()
@@ -51,6 +52,27 @@ export async function insertVote(
     pick: pickedPokemonId,
     other: otherPokemonId,
   })
+}
+
+export async function fetchAllVotes() {
+  const data = await db
+    .select({
+      name: pokemon.name,
+      type: pokemon.type,
+      votes: count(vote),
+    })
+    .from(vote)
+    .leftJoin(pokemon, eq(pokemon.id, vote.pick))
+    .groupBy(pokemon.name, pokemon.type)
+    .orderBy(desc(count(vote)))
+
+  let max = data[0].votes
+
+  return data.map((entry) => ({
+    name: entry.name!,
+    fill: pokemonColors[entry.type!],
+    votes: Math.round((entry.votes / max) * 100),
+  }))
 }
 
 function getIds(): [number, number] {
