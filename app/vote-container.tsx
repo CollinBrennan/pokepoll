@@ -7,6 +7,7 @@ import {
 } from '@/actions/pokemonActions'
 import { formattedPokemonName, pokemonColors } from '@/utils/pokemonUtils'
 import { PokemonData } from '@/utils/types'
+import Link from 'next/link'
 import { useState, useTransition } from 'react'
 
 type Props = {
@@ -93,18 +94,24 @@ export default function VoteContainer({ initialPokemon }: Props) {
             </div>
             <button
               onClick={handleVoteAgain}
-              className="bg-white mt-4 text-black px-4 py-2 rounded-xl disabled:brightness-50"
+              className="bg-white mt-4 text-black px-4 py-2 rounded-xl border-2 border-white hover:brightness-75 disabled:brightness-50"
               disabled={isPending}
             >
               Vote again
             </button>
+            <Link
+              href="/results"
+              className="mt-4 text-center border-white border-2 px-4 py-2 rounded-xl hover:bg-white hover:brightness-75 hover:text-black disabled:brightness-50"
+            >
+              Results
+            </Link>
           </div>
         ) : (
           <div className="text-center">
             <div className="text-xl">
               {name1}
               <br />
-              or
+              <span className="text-base">or</span>
               <br />
               {name2}
             </div>
