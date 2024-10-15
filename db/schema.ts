@@ -12,7 +12,7 @@ export const vote = pgTable('vote', {
   id: text('id')
     .$defaultFn(() => nanoid(11))
     .primaryKey(),
-  vote: integer('vote')
+  pick: integer('pick')
     .references(() => pokemon.id)
     .notNull(),
   other: integer('other')
