@@ -85,7 +85,7 @@ export default function VoteContainer({ initialPokemon }: Props) {
         />
       </button>
 
-      <div className="flex flex-col w-72 rounded-xl bg-zinc-900 p-8 font-bold justify-center items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="flex flex-col w-72 rounded-xl bg-zinc-900 p-8 justify-center items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         {hasVoted ? (
           <div className="flex flex-col">
             <div className="text-center">
@@ -94,21 +94,21 @@ export default function VoteContainer({ initialPokemon }: Props) {
             </div>
             <button
               onClick={handleVoteAgain}
-              className="bg-white mt-4 text-black px-4 py-2 rounded-xl border-2 border-white hover:brightness-75 disabled:brightness-50"
+              className="bg-white mt-4 text-black px-4 py-2 rounded-xl border-2 border-white hover:brightness-75 disabled:brightness-50 font-bold"
               disabled={isPending}
             >
               Vote again
             </button>
             <Link
               href="/results"
-              className="mt-4 text-center border-white border-2 px-4 py-2 rounded-xl hover:bg-white hover:brightness-75 hover:text-black disabled:brightness-50"
+              className="mt-4 text-center border-white border-2 px-4 py-2 rounded-xl hover:bg-white hover:brightness-75 hover:text-black font-bold disabled:brightness-50"
             >
               Results
             </Link>
           </div>
         ) : (
           <div className="text-center">
-            <div className="text-xl">
+            <div className="text-xl font-bold">
               {name1}
               <br />
               <span className="text-base">or</span>

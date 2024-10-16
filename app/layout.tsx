@@ -16,9 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-zinc-900 text-white">
         {children}
-        <div className="absolute top-0 left-0">
-          <Nav />
-        </div>
+        <Nav />
       </body>
     </html>
   )
