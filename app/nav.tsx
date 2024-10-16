@@ -12,7 +12,9 @@ const links: Link[] = [
 export default function Nav() {
   return (
     <div className="font-bold">
-      <div className="absolute left-4 top-4">PokePoll</div>
+      <a href="/" className="absolute left-4 top-4">
+        PokePoll
+      </a>
       <div className="absolute right-4 top-4 flex gap-4">
         <a href="/">Vote</a>
         {links.map((link) => (

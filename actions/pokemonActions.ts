@@ -2,7 +2,7 @@
 
 import db from '@/db/drizzle'
 import { pokemon, vote } from '@/db/schema'
-import { pokemonColors } from '@/utils/pokemonUtils'
+import { formattedPokemonName, pokemonColors } from '@/utils/pokemonUtils'
 import { PokemonData } from '@/utils/types'
 import { and, count, desc, eq } from 'drizzle-orm'
 
@@ -69,10 +69,14 @@ export async function fetchAllVotes() {
   let max = data[0].votes
 
   return data.map((entry) => ({
-    name: entry.name!,
+    name: formattedPokemonName(entry.name!),
     fill: pokemonColors[entry.type!],
     votes: Math.round((entry.votes / max) * 100),
   }))
+}
+
+export async function fetchAllPokemon(): Promise<PokemonData[]> {
+  return await db.select().from(pokemon)
 }
 
 function getIds(): [number, number] {
